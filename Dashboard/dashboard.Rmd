@@ -22,6 +22,8 @@ totalCY <- sum(airlineSafety$fatalities_00_14)
 airlineSafety$percentPY <- airlineSafety$fatalities_85_99 / totalPY
 airlineSafety$percentCY <- airlineSafety$fatalities_00_14 / totalCY 
 
+# Here we've created a percentage field, how much of the total.
+
 
 topFatality <- subset(airlineSafety, airlineSafety$percentCY > .05)
 
@@ -35,9 +37,13 @@ G <- sum(airlineSafety$fatalities_00_14) - sum(topFatality$fatalities_00_14)
 H <- 1 - sum(topFatality$percentPY)
 I <- 1 - sum(topFatality$percentCY)
 
+# I wanted to look at just the top airlines by incidents, but I didn't want
+# to ignore the other 49 airlines. This lets us see just how many of the
+# crashes are attributable to the top airlines.
 
 
-topFatality[nrow(topFatality) + 1,] = c("All Other (49 Airlines)", A, B, C, D, E, F, G, H, I)
+
+topFatality[nrow(topFatality) + 1,] = c("All Other (49 Airlines)", A, B, C, D, E, F, G, "other", H, I)
 
 write.csv(topFatality,"topFatality.csv")
 ```
@@ -45,7 +51,23 @@ write.csv(topFatality,"topFatality.csv")
 ```{r}
 airlineDeaths <- read.csv("airDeathsByYear.csv", stringsAsFactors = FALSE)
 carMiles <- read.csv("carmiles.csv", stringsAsFactors = FALSE)
+carDeaths <- read.csv("fatalitiesmm.csv")
 
 carMiles$hunMillionMiles <- carMiles$millionMiles / 100
+airlineDeaths$hunMillionMiles <- airlineDeaths$millionMiles/100
+airlineDeaths$fatalitieshmm <- airlineDeaths$airFatalities / airlineDeaths$hunMillionMiles
+
+
+airlineDeaths$carfatalitieshmm <- carDeaths$ï..fatalitiesmm
+
+write.csv(airlineDeaths, "airdeaths.csv")
+
+# This block of codes combines two dataframes, and also some of our statistics
+# are in hundred million miles and others are in million, so I created
+# those fields too.
+
+```
+
+```{r}
 
 ```
